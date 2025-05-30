@@ -12,12 +12,14 @@ class CryptoRepositoryImpl implements CryptoRepository {
   final String apiUrl = 'https://api.binance.com/api/v3/avgPrice';
 
   @override
-  Future<double> getPrice(String ticker) async {
-    print('Fetching price for $ticker');
+  Future<double> getPrice(String ticker1, String ticker2) async {
+    print('Fetching price for $ticker1');
     try {
       final response = await dio.get(
         apiUrl,
-        queryParameters: {'symbol': '${ticker.toUpperCase()}USDT'},
+        queryParameters: {
+          'symbol': '${ticker1.toUpperCase()}${ticker2.toUpperCase()}',
+        },
       );
       if (response.statusCode == 200 && response.data['price'] != null) {
         return double.tryParse(response.data['price'].toString()) ?? 0.0;

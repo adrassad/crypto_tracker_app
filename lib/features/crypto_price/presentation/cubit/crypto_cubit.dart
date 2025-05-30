@@ -21,17 +21,17 @@ class TitleCubit extends Cubit<TitleState> {
   final GetCryptoPriceUseCase useCase;
   TitleCubit(this.useCase) : super(TitleInitial());
 
-  Future<void> getPrice(String ticker) async {
-    if (ticker.isEmpty) {
+  Future<void> getPrice(String ticker1, String ticker2) async {
+    if (ticker1.isEmpty || ticker2.isEmpty) {
       emit(TitleInitial());
       return;
     }
     emit(TitleLoading());
     try {
-      final price = await useCase.execute(ticker);
+      final price = await useCase.execute(ticker1, ticker2);
       emit(
         TitleLoaded(
-          '1 ${ticker.toUpperCase()} = ${price.toStringAsFixed(2)} USDT',
+          '1 ${ticker1.toUpperCase()} = ${price.toStringAsFixed(2)} $ticker2',
         ),
       );
     } catch (e) {

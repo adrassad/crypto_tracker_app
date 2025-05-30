@@ -10,7 +10,8 @@ class CryptoPage extends StatefulWidget {
 }
 
 class _CryptoPageState extends State<CryptoPage> {
-  final _tickerController = TextEditingController();
+  final _ticker1Controller = TextEditingController();
+  final _ticker2Controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +22,46 @@ class _CryptoPageState extends State<CryptoPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextFormField(
-              controller: _tickerController,
-              decoration: const InputDecoration(labelText: 'Enter ticker'),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TextFormField(
+                      maxLength: 5,
+                      controller: _ticker1Controller,
+                      decoration: const InputDecoration(labelText: 'Coin 1'),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    var text1 = _ticker1Controller.text;
+                    var text2 = _ticker2Controller.text;
+                    _ticker1Controller.text = text2;
+                    _ticker2Controller.text = text1;
+                  },
+                  child: Icon(Icons.connecting_airports_sharp),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TextFormField(
+                      maxLength: 5,
+                      controller: _ticker2Controller,
+                      decoration: const InputDecoration(labelText: 'Coin 2'),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 context.read<TitleCubit>().getPrice(
-                  _tickerController.text.trim(),
+                  _ticker1Controller.text.trim(),
+                  _ticker2Controller.text.trim(),
                 );
               },
               child: const Text('Get Price'),
