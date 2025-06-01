@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../cubit/crypto_cubit.dart';
+import 'package:flutter/cupertino.dart';
 
 class CryptoPage extends StatefulWidget {
-  const CryptoPage({super.key});
+  final VoidCallback onToggleLocale;
+  const CryptoPage({super.key, required this.onToggleLocale});
 
   @override
   State<CryptoPage> createState() => _CryptoPageState();
@@ -15,8 +18,19 @@ class _CryptoPageState extends State<CryptoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Crypto Price Checker')),
+      appBar: AppBar(
+        title: Text(loc.appTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            onPressed: widget.onToggleLocale,
+            tooltip: loc.switchLanguage,
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -30,7 +44,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     child: TextFormField(
                       maxLength: 5,
                       controller: _ticker1Controller,
-                      decoration: const InputDecoration(labelText: 'Coin 1'),
+                      decoration: InputDecoration(labelText: loc.coin1),
                     ),
                   ),
                 ),
@@ -41,7 +55,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     _ticker1Controller.text = text2;
                     _ticker2Controller.text = text1;
                   },
-                  child: Icon(Icons.connecting_airports_sharp),
+                  child: const Icon(CupertinoIcons.arrow_left_right),
                 ),
                 Expanded(
                   child: Padding(
@@ -49,7 +63,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     child: TextFormField(
                       maxLength: 5,
                       controller: _ticker2Controller,
-                      decoration: const InputDecoration(labelText: 'Coin 2'),
+                      decoration: InputDecoration(labelText: loc.coin2),
                     ),
                   ),
                 ),
@@ -64,13 +78,13 @@ class _CryptoPageState extends State<CryptoPage> {
                   _ticker2Controller.text.trim(),
                 );
               },
-              child: const Text('Get Price'),
+              child: Text(loc.getPrice),
             ),
             const SizedBox(height: 20),
             BlocBuilder<TitleCubit, TitleState>(
               builder: (context, state) {
                 if (state is TitleInitial) {
-                  return const Text('Please enter a ticker.');
+                  return Text(loc.enterTicker);
                 } else if (state is TitleLoading) {
                   return const CircularProgressIndicator();
                 } else if (state is TitleLoaded) {
@@ -80,7 +94,7 @@ class _CryptoPageState extends State<CryptoPage> {
                   );
                 } else if (state is TitleError) {
                   return Text(
-                    state.message,
+                    state.errorCode,
                     style: const TextStyle(color: Colors.red),
                   );
                 }

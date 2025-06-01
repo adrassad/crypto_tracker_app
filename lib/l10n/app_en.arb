@@ -1,0 +1,12 @@
+{
+  "@@locale": "en",
+  "appTitle": "Crypto Price",
+  "switchLanguage": "Switch to Russian",
+  "getPrice": "Get Price",
+  "coin1": "Coin 1",
+  "coin2": "Coin 2",
+  "enterTicker": "Please enter a ticker.",
+  "error_fetch_failed": "Failed to fetch price",
+  "error_no_internet": "No internet connection",
+  "error_unknown": "Unknown error occurred"
+}

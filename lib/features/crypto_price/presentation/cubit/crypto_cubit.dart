@@ -13,8 +13,10 @@ class TitleLoaded extends TitleState {
 }
 
 class TitleError extends TitleState {
-  final String message;
-  TitleError(this.message);
+  //final String message;
+  //TitleError(this.message);
+  final String errorCode;
+  TitleError(this.errorCode);
 }
 
 class TitleCubit extends Cubit<TitleState> {
@@ -35,7 +37,7 @@ class TitleCubit extends Cubit<TitleState> {
         ),
       );
     } catch (e) {
-      emit(TitleError('Failed to fetch price: $e'));
+      emit(TitleError('error_unknown'));
     }
   }
 }

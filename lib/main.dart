@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'features/crypto_price/presentation/cubit/crypto_cubit.dart';
+import 'features/crypto_price/presentation/cubit/locale_cubit.dart';
 import 'features/crypto_price/presentation/pages/crypto_page.dart';
 import 'core/di/di.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
-  print('Dependencies initialized.');
-  runApp(const MyApp());
+  final localeCubit = LocaleCubit();
+  await localeCubit.loadLocale();
+  runApp(
+    BlocProvider<LocaleCubit>.value(value: localeCubit, child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,15 +23,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Crypto Price',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: BlocProvider(
-        create: (_) => di<TitleCubit>(),
-        child: const CryptoPage(),
-      ),
+    return BlocBuilder<LocaleCubit, Locale>(
+      builder: (context, locale) {
+        return MaterialApp(
+          title: 'Crypto Price',
+          locale: locale,
+          supportedLocales: const [Locale('en'), Locale('ru')],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          ),
+          home: BlocProvider(
+            create: (_) => di<TitleCubit>(),
+            child: CryptoPage(
+              onToggleLocale: () {
+                context.read<LocaleCubit>().toggleLocale();
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
