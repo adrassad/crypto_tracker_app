@@ -1,7 +1,8 @@
+import 'package:api_binance_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
+import 'package:api_binance_app/features/crypto_price/presentation/widgets/error_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../cubit/crypto_cubit.dart';
 import 'package:flutter/cupertino.dart';
 
 class CryptoPage extends StatefulWidget {
@@ -93,10 +94,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     style: const TextStyle(fontSize: 18),
                   );
                 } else if (state is TitleError) {
-                  return Text(
-                    state.errorCode,
-                    style: const TextStyle(color: Colors.red),
-                  );
+                  return ErrorDisplay(errorCode: state.errorCode);
                 }
                 return const SizedBox.shrink();
               },

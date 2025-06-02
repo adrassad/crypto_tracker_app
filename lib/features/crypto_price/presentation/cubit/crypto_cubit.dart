@@ -1,5 +1,6 @@
+import 'package:api_binance_app/features/crypto_price/domain/exceptions/crypto_exception.dart';
+import 'package:api_binance_app/features/crypto_price/domain/usecases/get_crypto_price_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/get_crypto_price_usecase.dart';
 
 abstract class TitleState {}
 
@@ -33,11 +34,24 @@ class TitleCubit extends Cubit<TitleState> {
       final price = await useCase.execute(ticker1, ticker2);
       emit(
         TitleLoaded(
-          '1 ${ticker1.toUpperCase()} = ${price.toStringAsFixed(2)} $ticker2',
+          '1 ${ticker1.toUpperCase()} = ${price.toStringAsFixed(5)} ${ticker2.toUpperCase()}',
         ),
       );
-    } catch (e) {
+    } on CryptoException catch (e) {
+      emit(TitleError(_mapErrorCode(e.code)));
+    } catch (_) {
       emit(TitleError('error_unknown'));
+    }
+  }
+
+  String _mapErrorCode(CryptoErrorCode code) {
+    switch (code) {
+      case CryptoErrorCode.noInternet:
+        return 'error_no_internet';
+      case CryptoErrorCode.fetchFailed:
+        return 'error_fetch_failed';
+      default:
+        return 'error_unknown';
     }
   }
 }
