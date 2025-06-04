@@ -1,37 +1,31 @@
-import 'package:api_binance_app/features/crypto_price/data/datasources/crypto_api_provider.dart';
-import 'package:api_binance_app/features/crypto_price/data/helpers/coingecko_id_resolver.dart';
-import 'package:api_binance_app/features/crypto_price/domain/exceptions/crypto_exception.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:crypto_tracker_app/features/crypto_price/data/datasources/crypto_api_provider.dart';
+import 'package:crypto_tracker_app/features/crypto_price/data/datasources/base_api_provider.dart';
+import 'package:crypto_tracker_app/features/crypto_price/data/helpers/coingecko_id_resolver.dart';
+import 'package:crypto_tracker_app/features/crypto_price/domain/exceptions/crypto_exception.dart';
 
-class CoinGeckoApiProvider implements CryptoApiProvider {
-  final Dio dio;
+class CoinGeckoApiProvider extends BaseApiProvider
+    implements CryptoApiProvider {
   late final CoinGeckoIdResolver _resolver;
 
-  CoinGeckoApiProvider({Dio? dio})
-    : dio = dio ?? Dio(BaseOptions(baseUrl: 'https://api.coingecko.com')) {
-    _resolver = CoinGeckoIdResolver(this.dio);
+  CoinGeckoApiProvider({super.dio})
+    : super(baseUrl: 'https://api.coingecko.com') {
+    _resolver = CoinGeckoIdResolver(dio);
   }
 
   @override
-  Future<double> getPrice(String ticker1, String ticker2) async {
-    final id = await _resolver.getId(ticker1);
+  Future<double> getPrice(String from, String to) async {
+    final id = await _resolver.getId(from);
     if (id == null) throw CryptoException(CryptoErrorCode.fetchFailed);
 
-    try {
-      final response = await dio.get(
-        '/api/v3/simple/price',
-        queryParameters: {'ids': id, 'vs_currencies': ticker2.toLowerCase()},
-      );
+    final response = await safeGet(
+      '/api/v3/simple/price',
+      queryParameters: {'ids': id, 'vs_currencies': to.toLowerCase()},
+    );
 
-      final price = response.data[id]?[ticker2.toLowerCase()];
-      if (response.statusCode == 200 && price != null) {
-        return double.tryParse(price.toString()) ?? 0.0;
-      }
-      throw CryptoException(CryptoErrorCode.fetchFailed);
-    } on DioException catch (e) {
-      debugPrint('CoinGecko DioException: $e');
-      throw CryptoException(CryptoErrorCode.fetchFailed);
+    final price = response.data[id]?[to.toLowerCase()];
+    if (response.statusCode == 200 && price != null) {
+      return double.tryParse(price.toString()) ?? 0.0;
     }
+    throw CryptoException(CryptoErrorCode.fetchFailed);
   }
 }

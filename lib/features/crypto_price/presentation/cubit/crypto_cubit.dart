@@ -1,5 +1,5 @@
-import 'package:api_binance_app/features/crypto_price/domain/exceptions/crypto_exception.dart';
-import 'package:api_binance_app/features/crypto_price/domain/usecases/get_crypto_price_usecase.dart';
+import 'package:crypto_tracker_app/features/crypto_price/domain/exceptions/crypto_exception.dart';
+import 'package:crypto_tracker_app/features/crypto_price/domain/usecases/get_crypto_price_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class TitleState {}

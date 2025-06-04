@@ -1,4 +1,4 @@
-import 'package:api_binance_app/features/crypto_price/domain/repositories/crypto_repository.dart';
+import 'package:crypto_tracker_app/features/crypto_price/domain/repositories/crypto_repository.dart';
 
 class GetCryptoPriceUseCase {
   final CryptoRepository repository;

@@ -1,5 +1,5 @@
-import 'package:api_binance_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
-import 'package:api_binance_app/features/crypto_price/presentation/widgets/error_display.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/error_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +16,8 @@ class CryptoPage extends StatefulWidget {
 class _CryptoPageState extends State<CryptoPage> {
   final _ticker1Controller = TextEditingController();
   final _ticker2Controller = TextEditingController();
+  final _ticker1Focus = FocusNode();
+  final _ticker2Focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     child: TextFormField(
                       maxLength: 5,
                       controller: _ticker1Controller,
+                      focusNode: _ticker1Focus,
                       decoration: InputDecoration(labelText: loc.coin1),
                     ),
                   ),
@@ -64,6 +67,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     child: TextFormField(
                       maxLength: 5,
                       controller: _ticker2Controller,
+                      focusNode: _ticker2Focus,
                       decoration: InputDecoration(labelText: loc.coin2),
                     ),
                   ),

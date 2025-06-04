@@ -1,5 +1,5 @@
-import 'package:api_binance_app/features/crypto_price/data/datasources/crypto_api_provider.dart';
-import 'package:api_binance_app/features/crypto_price/domain/repositories/crypto_repository.dart';
+import 'package:crypto_tracker_app/features/crypto_price/data/datasources/crypto_api_provider.dart';
+import 'package:crypto_tracker_app/features/crypto_price/domain/repositories/crypto_repository.dart';
 
 class CryptoRepositoryImpl implements CryptoRepository {
   final List<CryptoApiProvider> providers;
