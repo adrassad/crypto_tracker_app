@@ -20,19 +20,26 @@
 
 The app follows a **Feature-First Clean Architecture** pattern:
 
+<pre>
+
 lib/
 ├── core/
-│   ├── di/                 # Dependency injection setup
-│   ├── theme/              # ThemeCubit
+│   ├── di/             # Dependency injection setup
+│   └── theme/          # ThemeCubit
+│
 ├── features/
 │   └── crypto_price/
-│       ├── data/           # Data sources (future)
-│       ├── domain/         # Business logic (future)
+│       ├── data/       # Data sources (future)
+│       ├── domain/     # Business logic (future)
 │       └── presentation/
-│           ├── cubit/      # TitleCubit, LocaleCubit, ThemeCubit
-│           ├── widgets/    # UI components
-│           └── pages/      # CryptoPage screen
-├── gen_l10n/               # Generated localization files
+│           ├── cubit/  # TitleCubit, LocaleCubit, ThemeCubit
+│           ├── pages/  # CryptoPage screen
+│           └── widgets/# UI components
+│
+└── gen_l10n/           # Generated localization files
+
+</pre>
+
 
 ## 🛠️ Tech Stack
 
