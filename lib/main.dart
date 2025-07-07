@@ -1,3 +1,4 @@
+import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/crypto_price/presentation/cubit/crypto_cubit.dart';
@@ -5,7 +6,6 @@ import 'features/crypto_price/presentation/cubit/locale_cubit.dart';
 import 'features/crypto_price/presentation/pages/crypto_page.dart';
 import 'core/di/di.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,8 +1,8 @@
 import 'package:crypto_tracker_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
 import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/error_display.dart';
+import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
 class CryptoPage extends StatefulWidget {
