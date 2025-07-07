@@ -3,11 +3,16 @@ import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/er
 import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CryptoPage extends StatefulWidget {
   final VoidCallback onToggleLocale;
-  const CryptoPage({super.key, required this.onToggleLocale});
+  final VoidCallback onToggleTheme;
+  const CryptoPage({
+    super.key,
+    required this.onToggleLocale,
+    required this.onToggleTheme,
+  });
 
   @override
   State<CryptoPage> createState() => _CryptoPageState();
@@ -24,78 +29,129 @@ class _CryptoPageState extends State<CryptoPage> {
     final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
+      //backgroundColor: const Color(0xFFF9F7F7),
       appBar: AppBar(
-        title: Text(loc.appTitle),
+        // backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          loc.appTitle,
+          style: GoogleFonts.montserrat(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            // color: Colors.black87,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.language),
+            icon: const Icon(
+              Icons.language,
+              //color: Colors.black87
+            ),
             onPressed: widget.onToggleLocale,
             tooltip: loc.switchLanguage,
+          ),
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: widget.onToggleTheme,
+            tooltip: loc.switchTheme,
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: TextFormField(
-                      maxLength: 5,
-                      controller: _ticker1Controller,
-                      focusNode: _ticker1Focus,
-                      decoration: InputDecoration(labelText: loc.coin1),
+                  child: _buildTickerField(
+                    _ticker1Controller,
+                    loc.coin1,
+                    _ticker1Focus,
+                    _ticker2Focus,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //backgroundColor: Colors.deepPurple.shade300,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      minimumSize: const Size(48, 48),
+                      padding: EdgeInsets.zero,
+                    ),
+                    onPressed: () {
+                      final temp = _ticker1Controller.text;
+                      _ticker1Controller.text = _ticker2Controller.text;
+                      _ticker2Controller.text = temp;
+                    },
+                    child: const Icon(
+                      Icons.swap_horiz_rounded,
+                      //color: Colors.white,
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    var text1 = _ticker1Controller.text;
-                    var text2 = _ticker2Controller.text;
-                    _ticker1Controller.text = text2;
-                    _ticker2Controller.text = text1;
-                  },
-                  child: const Icon(CupertinoIcons.arrow_left_right),
-                ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: TextFormField(
-                      maxLength: 5,
-                      controller: _ticker2Controller,
-                      focusNode: _ticker2Focus,
-                      decoration: InputDecoration(labelText: loc.coin2),
-                    ),
+                  child: _buildTickerField(
+                    _ticker2Controller,
+                    loc.coin2,
+                    _ticker2Focus,
+                    _ticker1Focus,
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                // backgroundColor: Colors.deepPurple.shade400,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
               onPressed: () {
                 context.read<TitleCubit>().getPrice(
                   _ticker1Controller.text.trim(),
                   _ticker2Controller.text.trim(),
                 );
               },
-              child: Text(loc.getPrice),
+              child: Text(
+                loc.getPrice,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  // color: Colors.white,
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
             BlocBuilder<TitleCubit, TitleState>(
               builder: (context, state) {
                 if (state is TitleInitial) {
-                  return Text(loc.enterTicker);
+                  return Text(
+                    loc.enterTicker,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      //      color: Colors.black54,
+                    ),
+                  );
                 } else if (state is TitleLoading) {
                   return const CircularProgressIndicator();
                 } else if (state is TitleLoaded) {
                   return Text(
                     state.result,
-                    style: const TextStyle(fontSize: 18),
+                    style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      //    color: Colors.black87,
+                    ),
                   );
                 } else if (state is TitleError) {
                   return ErrorDisplay(errorCode: state.errorCode);
@@ -104,6 +160,56 @@ class _CryptoPageState extends State<CryptoPage> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTickerField(
+    TextEditingController controller,
+    String label,
+    FocusNode currentNode,
+    FocusNode? nextNode,
+  ) {
+    return TextFormField(
+      onFieldSubmitted: (_) {
+        if (nextNode != null) {
+          FocusScope.of(context).requestFocus(nextNode);
+        }
+      },
+      onEditingComplete: () {
+        if (nextNode != null && nextNode == _ticker1Focus) {
+          context.read<TitleCubit>().getPrice(
+            _ticker1Controller.text.trim(),
+            _ticker2Controller.text.trim(),
+          );
+        } else {
+          FocusScope.of(context).requestFocus(nextNode);
+        }
+      },
+      onTapOutside: (_) => currentNode.unfocus(),
+      focusNode: currentNode,
+      controller: controller,
+      maxLength: 5,
+      textCapitalization: TextCapitalization.characters,
+      style: GoogleFonts.montserrat(fontSize: 16),
+      decoration: InputDecoration(
+        counterText: "",
+        labelText: label,
+        labelStyle: GoogleFonts.montserrat(color: Colors.grey[700]),
+        filled: true,
+        //fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.deepPurple.shade300),
         ),
       ),
     );

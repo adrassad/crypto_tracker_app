@@ -2,6 +2,7 @@
   "@@locale": "en",
   "appTitle": "Crypto Price",
   "switchLanguage": "Switch to Russian",
+  "switchTheme": "Switch to Theme",
   "getPrice": "Get Price",
   "coin1": "Coin 1",
   "coin2": "Coin 2",

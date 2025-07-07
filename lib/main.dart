@@ -1,3 +1,4 @@
+import 'package:crypto_tracker_app/features/theme/cubit/theme_cubit.dart';
 import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,15 @@ Future<void> main() async {
   final localeCubit = LocaleCubit();
   await localeCubit.loadLocale();
   runApp(
-    BlocProvider<LocaleCubit>.value(value: localeCubit, child: const MyApp()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<LocaleCubit>.value(value: localeCubit),
+        BlocProvider<ThemeCubit>.value(value: di<ThemeCubit>()),
+      ],
+      child: const MyApp(),
+    ),
+
+    //BlocProvider<LocaleCubit>.value(value: localeCubit, child: const MyApp()),
   );
 }
 
@@ -22,29 +31,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LocaleCubit, Locale>(
-      builder: (context, locale) {
-        return MaterialApp(
-          title: 'Crypto Price',
-          locale: locale,
-          supportedLocales: const [Locale('en'), Locale('ru')],
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-          home: BlocProvider(
-            create: (_) => di<TitleCubit>(),
-            child: CryptoPage(
-              onToggleLocale: () {
-                context.read<LocaleCubit>().toggleLocale();
-              },
-            ),
-          ),
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        return BlocBuilder<LocaleCubit, Locale>(
+          builder: (context, locale) {
+            return MaterialApp(
+              theme: ThemeData.light(),
+              darkTheme: ThemeData.dark(),
+              themeMode: themeMode,
+              title: 'Crypto Price',
+              locale: locale,
+              supportedLocales: const [Locale('en'), Locale('ru')],
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+
+              home: BlocProvider(
+                create: (_) => di<TitleCubit>(),
+                child: CryptoPage(
+                  onToggleLocale: () {
+                    context.read<LocaleCubit>().toggleLocale();
+                  },
+                  onToggleTheme: () {
+                    context.read<ThemeCubit>().toggleTheme();
+                  },
+                ),
+              ),
+            );
+          },
         );
       },
     );

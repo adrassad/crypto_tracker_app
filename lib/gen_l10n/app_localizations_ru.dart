@@ -15,6 +15,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get switchLanguage => 'Переключить на английский';
 
   @override
+  String get switchTheme => 'Переключить на стиль';
+
+  @override
   String get getPrice => 'Узнать курс';
 
   @override

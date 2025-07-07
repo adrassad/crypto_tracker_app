@@ -6,6 +6,7 @@ import 'package:crypto_tracker_app/features/crypto_price/data/repositories/crypt
 import 'package:crypto_tracker_app/features/crypto_price/domain/repositories/crypto_repository.dart';
 import 'package:crypto_tracker_app/features/crypto_price/domain/usecases/get_crypto_price_usecase.dart';
 import 'package:crypto_tracker_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
+import 'package:crypto_tracker_app/features/theme/cubit/theme_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 final di = GetIt.instance;
@@ -35,4 +36,5 @@ void setupDependencies() {
   );
   di.registerLazySingleton(() => GetCryptoPriceUseCase(di<CryptoRepository>()));
   di.registerFactory(() => TitleCubit(di<GetCryptoPriceUseCase>()));
+  di.registerSingleton<ThemeCubit>(ThemeCubit());
 }

@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Switch to Russian'**
   String get switchLanguage;
 
+  /// No description provided for @switchTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Theme'**
+  String get switchTheme;
+
   /// No description provided for @getPrice.
   ///
   /// In en, this message translates to:
