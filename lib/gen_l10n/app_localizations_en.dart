@@ -15,7 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchLanguage => 'Switch to Russian';
 
   @override
-  String get switchTheme => 'Switch to Theme';
+  String get switchTheme => 'Switch Theme';
 
   @override
   String get getPrice => 'Get Price';

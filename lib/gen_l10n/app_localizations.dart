@@ -113,7 +113,7 @@ abstract class AppLocalizations {
   /// No description provided for @switchTheme.
   ///
   /// In en, this message translates to:
-  /// **'Switch to Theme'**
+  /// **'Switch Theme'**
   String get switchTheme;
 
   /// No description provided for @getPrice.

@@ -1,9 +1,14 @@
-# 💸 Crypto Tracker App
+# 💰 Crypto Tracker App
 
 [![Flutter](https://img.shields.io/badge/flutter-3.22%2B-blue?logo=flutter)](https://flutter.dev)
 [![Stars](https://img.shields.io/github/stars/adrassad/crypto_tracker_app?style=social)](https://github.com/adrassad/crypto_tracker_app/stargazers)
 [![License](https://img.shields.io/github/license/adrassad/crypto_tracker_app)](LICENSE)
 [![Build](https://github.com/adrassad/crypto_tracker_app/actions/workflows/flutter.yml/badge.svg)](https://github.com/adrassad/crypto_tracker_app/actions)
+
+## 🔗 Live
+
+You can try the app in your browser here:  
+👉 [https://cryprice.top](https://cryprice.top)
 
 **Crypto Tracker App** is a cross-platform Flutter application that allows users to track real-time cryptocurrency exchange rates. It features language switching, light/dark theme support, and modern architecture based on `Bloc` and `Cubit`.
 

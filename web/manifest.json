@@ -1,11 +1,11 @@
 {
-    "name": "api_binance_app",
-    "short_name": "api_binance_app",
+    "name": "crypto_tracker_price",
+    "short_name": "crypto_tracker_price",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Crypto tracker price.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
