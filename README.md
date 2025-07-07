@@ -1,16 +1,74 @@
-# api_binance_app
+# 💸 Crypto Tracker App
 
-A new Flutter project.
+[![Flutter](https://img.shields.io/badge/flutter-3.22%2B-blue?logo=flutter)](https://flutter.dev)
+[![Stars](https://img.shields.io/github/stars/adrassad/crypto_tracker_app?style=social)](https://github.com/adrassad/crypto_tracker_app/stargazers)
+[![License](https://img.shields.io/github/license/adrassad/crypto_tracker_app)](LICENSE)
+[![Build](https://github.com/adrassad/crypto_tracker_app/actions/workflows/flutter.yml/badge.svg)](https://github.com/adrassad/crypto_tracker_app/actions)
 
-## Getting Started
+**Crypto Tracker App** is a cross-platform Flutter application that allows users to track real-time cryptocurrency exchange rates. It features language switching, light/dark theme support, and modern architecture based on `Bloc` and `Cubit`.
 
-This project is a starting point for a Flutter application.
+## 📱 Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🔎 Enter two crypto tickers and get the current exchange rate between them.
+- 🌐 Multi-language support (🇬🇧 English, 🇷🇺 Russian) with instant switching.
+- 🌓 Toggle between light and dark themes.
+- ⚙️ Reactive architecture using `Bloc`/`Cubit`.
+- 🧪 Clean error handling with user-friendly messages.
+- 🎨 Elegant UI using Material 3 and Google Fonts.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🧱 Architecture
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The app follows a **Feature-First Clean Architecture** pattern:
+
+lib/
+├── core/
+│   ├── di/                 # Dependency injection setup
+│   ├── theme/              # ThemeCubit
+├── features/
+│   └── crypto_price/
+│       ├── data/           # Data sources (future)
+│       ├── domain/         # Business logic (future)
+│       └── presentation/
+│           ├── cubit/      # TitleCubit, LocaleCubit, ThemeCubit
+│           ├── widgets/    # UI components
+│           └── pages/      # CryptoPage screen
+├── gen_l10n/               # Generated localization files
+
+## 🛠️ Tech Stack
+
+- Flutter 3.22+
+- Dart
+- flutter_bloc
+- Google Fonts
+- Material 3
+- flutter_localizations
+- Clean Architecture (feature-based)
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/adrassad/crypto_tracker_app.git
+cd crypto_tracker_app
+flutter pub get
+flutter run
+
+🌍 Screenshots
+Light Theme
+Dark Theme
+
+
+
+📌 Roadmap
+	•	Display historical price charts
+	•	Favorite coins list
+	•	Real API integration (CoinGecko, CoinMarketCap)
+	•	Authentication and portfolio tracking
+	•	Firebase or Supabase integration
+
+👨‍💻 Author
+
+adrassad — GitHub Profile
+
+⸻
+
+If you like the project, consider giving it a ⭐️ on GitHub!
