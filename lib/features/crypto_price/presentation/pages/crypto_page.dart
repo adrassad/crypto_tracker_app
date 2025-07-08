@@ -69,6 +69,7 @@ class _CryptoPageState extends State<CryptoPage> {
                   child: _buildTickerField(
                     _ticker1Controller,
                     loc.coin1,
+                    'BTC',
                     _ticker1Focus,
                     _ticker2Focus,
                   ),
@@ -99,6 +100,7 @@ class _CryptoPageState extends State<CryptoPage> {
                   child: _buildTickerField(
                     _ticker2Controller,
                     loc.coin2,
+                    'USDT',
                     _ticker2Focus,
                     _ticker1Focus,
                   ),
@@ -168,6 +170,7 @@ class _CryptoPageState extends State<CryptoPage> {
   Widget _buildTickerField(
     TextEditingController controller,
     String label,
+    String helperText,
     FocusNode currentNode,
     FocusNode? nextNode,
   ) {
@@ -196,6 +199,7 @@ class _CryptoPageState extends State<CryptoPage> {
       decoration: InputDecoration(
         counterText: "",
         labelText: label,
+        helperText: helperText,
         labelStyle: GoogleFonts.montserrat(color: Colors.grey[700]),
         filled: true,
         //fillColor: Colors.white,
