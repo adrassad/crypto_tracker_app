@@ -14,18 +14,31 @@ class CoinGeckoApiProvider extends BaseApiProvider
 
   @override
   Future<double> getPrice(String from, String to) async {
-    final id = await _resolver.getId(from);
-    if (id == null) throw CryptoException(CryptoErrorCode.fetchFailed);
+    final directPrice = await _tryGetDirectPrice(from, to);
+    if (directPrice != null) return directPrice;
 
-    final response = await safeGet(
-      '/api/v3/simple/price',
-      queryParameters: {'ids': id, 'vs_currencies': to.toLowerCase()},
-    );
-
-    final price = response.data[id]?[to.toLowerCase()];
-    if (response.statusCode == 200 && price != null) {
-      return double.tryParse(price.toString()) ?? 0.0;
+    final reversePrice = await _tryGetDirectPrice(to, from);
+    if (reversePrice != null && reversePrice != 0.0) {
+      return 1 / reversePrice;
     }
     throw CryptoException(CryptoErrorCode.fetchFailed);
+  }
+
+  Future<double?> _tryGetDirectPrice(String from, String to) async {
+    try {
+      final id = await _resolver.getId(from);
+      if (id == null) throw CryptoException(CryptoErrorCode.fetchFailed);
+
+      final response = await safeGet(
+        '/api/v3/simple/price',
+        queryParameters: {'ids': id, 'vs_currencies': to.toLowerCase()},
+      );
+
+      final price = response.data[id]?[to.toLowerCase()];
+      if (response.statusCode == 200 && price != null) {
+        return double.tryParse(price.toString()) ?? 0.0;
+      }
+    } catch (e) {}
+    return null;
   }
 }

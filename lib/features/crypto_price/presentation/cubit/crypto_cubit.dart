@@ -34,7 +34,7 @@ class TitleCubit extends Cubit<TitleState> {
       final price = await useCase.execute(ticker1, ticker2);
       emit(
         TitleLoaded(
-          '1 ${ticker1.toUpperCase()} = ${price.toStringAsFixed(5)} ${ticker2.toUpperCase()}',
+          '1 ${ticker1.toUpperCase()} = ${price.toStringAsFixed(8)} ${ticker2.toUpperCase()}',
         ),
       );
     } on CryptoException catch (e) {

@@ -7,15 +7,30 @@ class BinanceApiProvider extends BaseApiProvider implements CryptoApiProvider {
 
   @override
   Future<double> getPrice(String from, String to) async {
-    final response = await safeGet(
-      '/api/v3/avgPrice',
-      queryParameters: {'symbol': '${from.toUpperCase()}${to.toUpperCase()}'},
-    );
+    final directPrice = await _tryGetDirectPrice(from, to);
+    if (directPrice != null) return directPrice;
 
-    final price = response.data['price'];
-    if (response.statusCode == 200 && price != null) {
-      return double.tryParse(price.toString()) ?? 0.0;
+    final reversePrice = await _tryGetDirectPrice(to, from);
+    if (reversePrice != null && reversePrice != 0.0) {
+      return 1 / reversePrice;
     }
     throw CryptoException(CryptoErrorCode.fetchFailed);
+  }
+
+  Future<double?> _tryGetDirectPrice(String from, String to) async {
+    final symbol = '${from.toUpperCase()}${to.toUpperCase()}';
+
+    try {
+      final response = await safeGet(
+        '/api/v3/avgPrice',
+        queryParameters: {'symbol': symbol},
+      );
+      final price = response.data['price'];
+      if (response.statusCode == 200 && price != null) {
+        return double.tryParse(price.toString());
+      }
+    } catch (_) {}
+
+    return null;
   }
 }
