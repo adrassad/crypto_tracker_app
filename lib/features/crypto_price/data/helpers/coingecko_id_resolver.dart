@@ -43,7 +43,7 @@ class CoinGeckoIdResolver {
     final exact = matches.firstWhere(
       (coin) =>
           coin['id'] == lower || coin['name']!.toLowerCase().contains(lower),
-      orElse: () => Map(),
+      orElse: () => <String, String>{},
     );
     return exact['id'];
   }

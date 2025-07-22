@@ -1,3 +1,4 @@
+import 'package:crypto_tracker_app/core/di/di.dart';
 import 'package:crypto_tracker_app/features/theme/cubit/theme_cubit.dart';
 import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/crypto_price/presentation/cubit/crypto_cubit.dart';
 import 'features/crypto_price/presentation/cubit/locale_cubit.dart';
 import 'features/crypto_price/presentation/pages/crypto_page.dart';
-import 'core/di/di.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
@@ -13,16 +13,16 @@ Future<void> main() async {
   setupDependencies();
   final localeCubit = LocaleCubit();
   await localeCubit.loadLocale();
+  final themeCubit = ThemeCubit();
+  await themeCubit.loadTheme();
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider<LocaleCubit>.value(value: localeCubit),
-        BlocProvider<ThemeCubit>.value(value: di<ThemeCubit>()),
+        BlocProvider<ThemeCubit>.value(value: themeCubit),
       ],
       child: const MyApp(),
     ),
-
-    //BlocProvider<LocaleCubit>.value(value: localeCubit, child: const MyApp()),
   );
 }
 
@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-
               home: BlocProvider(
                 create: (_) => di<TitleCubit>(),
                 child: CryptoPage(

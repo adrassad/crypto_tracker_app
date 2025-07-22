@@ -30,7 +30,9 @@ class BybitApiProvider extends BaseApiProvider implements CryptoApiProvider {
       if (response.statusCode == 200 && data is List && data.isNotEmpty) {
         return double.tryParse(data.first['lastPrice'].toString()) ?? 0.0;
       }
-    } catch (_) {}
-    return null;
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    } catch (e) {
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    }
   }
 }

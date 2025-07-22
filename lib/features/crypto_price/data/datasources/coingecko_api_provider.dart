@@ -5,12 +5,11 @@ import 'package:crypto_tracker_app/features/crypto_price/domain/exceptions/crypt
 
 class CoinGeckoApiProvider extends BaseApiProvider
     implements CryptoApiProvider {
-  late final CoinGeckoIdResolver _resolver;
+  final CoinGeckoIdResolver _resolver;
 
-  CoinGeckoApiProvider({super.dio})
-    : super(baseUrl: 'https://api.coingecko.com') {
-    _resolver = CoinGeckoIdResolver(dio);
-  }
+  CoinGeckoApiProvider({required CoinGeckoIdResolver resolver, super.dio})
+    : _resolver = resolver,
+      super(baseUrl: 'https://api.coingecko.com');
 
   @override
   Future<double> getPrice(String from, String to) async {
@@ -21,6 +20,7 @@ class CoinGeckoApiProvider extends BaseApiProvider
     if (reversePrice != null && reversePrice != 0.0) {
       return 1 / reversePrice;
     }
+
     throw CryptoException(CryptoErrorCode.fetchFailed);
   }
 
@@ -38,7 +38,10 @@ class CoinGeckoApiProvider extends BaseApiProvider
       if (response.statusCode == 200 && price != null) {
         return double.tryParse(price.toString()) ?? 0.0;
       }
-    } catch (e) {}
-    return null;
+
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    } catch (_) {
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    }
   }
 }

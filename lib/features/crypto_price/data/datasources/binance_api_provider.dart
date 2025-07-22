@@ -29,8 +29,9 @@ class BinanceApiProvider extends BaseApiProvider implements CryptoApiProvider {
       if (response.statusCode == 200 && price != null) {
         return double.tryParse(price.toString());
       }
-    } catch (_) {}
-
-    return null;
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    } catch (e) {
+      throw CryptoException(CryptoErrorCode.fetchFailed);
+    }
   }
 }
