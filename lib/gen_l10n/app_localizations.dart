@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'Get Price'**
   String get getPrice;
 
+  /// No description provided for @count.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get count;
+
   /// No description provided for @coin1.
   ///
   /// In en, this message translates to:

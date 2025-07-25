@@ -21,6 +21,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get getPrice => 'Узнать курс';
 
   @override
+  String get count => 'Количество';
+
+  @override
   String get coin1 => 'Монета 1';
 
   @override

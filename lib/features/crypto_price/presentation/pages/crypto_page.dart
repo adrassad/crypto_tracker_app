@@ -1,9 +1,12 @@
-import 'package:crypto_tracker_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
-import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/error_display.dart';
-import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/count_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/cubit/crypto_cubit.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/error_display.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/ticker_field.dart';
+import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/result_price_list.dart';
+import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
 
 class CryptoPage extends StatefulWidget {
   final VoidCallback onToggleLocale;
@@ -19,34 +22,31 @@ class CryptoPage extends StatefulWidget {
 }
 
 class _CryptoPageState extends State<CryptoPage> {
+  final _countController = TextEditingController();
   final _ticker1Controller = TextEditingController();
   final _ticker2Controller = TextEditingController();
+  final _countFocus = FocusNode();
   final _ticker1Focus = FocusNode();
   final _ticker2Focus = FocusNode();
+  final _buttonFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
-      //backgroundColor: const Color(0xFFF9F7F7),
       appBar: AppBar(
-        // backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           loc.appTitle,
           style: GoogleFonts.montserrat(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            // color: Colors.black87,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.language,
-              //color: Colors.black87
-            ),
+            icon: const Icon(Icons.language),
             onPressed: widget.onToggleLocale,
             tooltip: loc.switchLanguage,
           ),
@@ -58,27 +58,35 @@ class _CryptoPageState extends State<CryptoPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 16),
+            Expanded(
+              child: CountField(
+                controller: _countController,
+                label: loc.count,
+                helperText: '0.0000',
+                currentNode: _countFocus,
+                nextNode: _ticker1Focus,
+              ),
+            ),
             Row(
               children: [
                 Expanded(
-                  child: _buildTickerField(
-                    _ticker1Controller,
-                    loc.coin1,
-                    'BTC',
-                    _ticker1Focus,
-                    _ticker2Focus,
+                  child: TickerField(
+                    controller: _ticker1Controller,
+                    label: loc.coin1,
+                    helperText: 'BTC',
+                    currentNode: _ticker1Focus,
+                    nextNode: _ticker2Focus,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      //backgroundColor: Colors.deepPurple.shade300,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -90,27 +98,31 @@ class _CryptoPageState extends State<CryptoPage> {
                       _ticker1Controller.text = _ticker2Controller.text;
                       _ticker2Controller.text = temp;
                     },
-                    child: const Icon(
-                      Icons.swap_horiz_rounded,
-                      //color: Colors.white,
-                    ),
+                    child: const Icon(Icons.swap_horiz_rounded),
                   ),
                 ),
                 Expanded(
-                  child: _buildTickerField(
-                    _ticker2Controller,
-                    loc.coin2,
-                    'USDT',
-                    _ticker2Focus,
-                    _ticker1Focus,
+                  child: TickerField(
+                    controller: _ticker2Controller,
+                    label: loc.coin2,
+                    helperText: 'USDT',
+                    currentNode: _ticker2Focus,
+                    nextNode: _buttonFocus,
+                    onEditingComplete: () {
+                      context.read<TitleCubit>().getPrice(
+                        _ticker1Controller.text.trim(),
+                        _ticker2Controller.text.trim(),
+                        _countController.text,
+                      );
+                    },
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 32),
             ElevatedButton(
+              focusNode: _buttonFocus,
               style: ElevatedButton.styleFrom(
-                // backgroundColor: Colors.deepPurple.shade400,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 40,
                   vertical: 16,
@@ -120,40 +132,39 @@ class _CryptoPageState extends State<CryptoPage> {
                 ),
               ),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 context.read<TitleCubit>().getPrice(
                   _ticker1Controller.text.trim(),
                   _ticker2Controller.text.trim(),
+                  _countController.text,
                 );
               },
               child: Text(
                 loc.getPrice,
-                style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  // color: Colors.white,
-                ),
+                style: GoogleFonts.montserrat(fontSize: 16),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 20),
             BlocBuilder<TitleCubit, TitleState>(
               builder: (context, state) {
                 if (state is TitleInitial) {
                   return Text(
                     loc.enterTicker,
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      //      color: Colors.black54,
-                    ),
+                    style: GoogleFonts.montserrat(fontSize: 16),
                   );
                 } else if (state is TitleLoading) {
-                  return const CircularProgressIndicator();
-                } else if (state is TitleLoaded) {
-                  return Text(
-                    state.result,
-                    style: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      //    color: Colors.black87,
+                  return Center(
+                    child: Image.asset(
+                      'assets/gifs/dance_cat.gif',
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.contain,
                     ),
+                  );
+                } else if (state is TitleLoaded) {
+                  return ResultPriceList(
+                    results: state.results,
+                    localizeError: (code) => _localizeError(code, loc),
                   );
                 } else if (state is TitleError) {
                   return ErrorDisplay(errorCode: state.errorCode);
@@ -167,55 +178,16 @@ class _CryptoPageState extends State<CryptoPage> {
     );
   }
 
-  Widget _buildTickerField(
-    TextEditingController controller,
-    String label,
-    String helperText,
-    FocusNode currentNode,
-    FocusNode? nextNode,
-  ) {
-    return TextFormField(
-      onFieldSubmitted: (_) {
-        if (nextNode != null) {
-          FocusScope.of(context).requestFocus(nextNode);
-        }
-      },
-      onEditingComplete: () {
-        if (nextNode != null && nextNode == _ticker1Focus) {
-          context.read<TitleCubit>().getPrice(
-            _ticker1Controller.text.trim(),
-            _ticker2Controller.text.trim(),
-          );
-        } else {
-          FocusScope.of(context).requestFocus(nextNode);
-        }
-      },
-      onTapOutside: (_) => currentNode.unfocus(),
-      focusNode: currentNode,
-      controller: controller,
-      maxLength: 5,
-      textCapitalization: TextCapitalization.characters,
-      style: GoogleFonts.montserrat(fontSize: 16),
-      decoration: InputDecoration(
-        counterText: "",
-        labelText: label,
-        helperText: helperText,
-        labelStyle: GoogleFonts.montserrat(color: Colors.grey[700]),
-        filled: true,
-        //fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple.shade300),
-        ),
-      ),
-    );
+  String _localizeError(String? code, AppLocalizations loc) {
+    switch (code) {
+      case 'error_no_internet':
+        return loc.error_no_internet;
+      case 'error_fetch_failed':
+        return loc.error_fetch_failed;
+      case 'error_unknown':
+        return loc.error_unknown;
+      default:
+        return loc.error_unknown;
+    }
   }
 }

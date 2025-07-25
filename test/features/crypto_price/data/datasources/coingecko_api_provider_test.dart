@@ -24,7 +24,7 @@ void main() {
     when(() => resolver.getId(any())).thenAnswer((_) async => null);
 
     expect(
-      () async => await provider.getPrice('btc', 'usdt'),
+      () async => await provider.getPrice('btc', 'usdt', '0.1'),
       throwsA(
         isA<CryptoException>().having(
           (e) => e.code,

@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get getPrice => 'Get Price';
 
   @override
+  String get count => 'Count';
+
+  @override
   String get coin1 => 'Coin 1';
 
   @override

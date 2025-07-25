@@ -36,6 +36,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/gifs/dance_cat.gif
 
 flutter_launcher_icons:
   android: true

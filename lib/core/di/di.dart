@@ -17,17 +17,23 @@ void setupDependencies() {
   final dio = Dio(); // Один экземпляр на все API
 
   di.registerLazySingleton<CryptoApiProvider>(
-    () => BinanceApiProvider(dio: dio),
+    () => BinanceApiProvider(),
     instanceName: 'binance',
   );
 
   di.registerLazySingleton<CryptoApiProvider>(
-    () => CoinGeckoApiProvider(resolver: CoinGeckoIdResolver(dio), dio: dio),
+    () =>
+    /// `CoinGeckoApiProvider` is a class that serves as a data provider for fetching
+    /// cryptocurrency data from the CoinGecko API. It utilizes a `CoinGeckoIdResolver` instance
+    /// to resolve CoinGecko-specific identifiers using Dio for making HTTP requests. This
+    /// provider is registered as a lazy singleton in the dependency injection setup and is used
+    /// as one of the sources for the `CryptoRepositoryImpl` to retrieve cryptocurrency data.
+    CoinGeckoApiProvider(resolver: CoinGeckoIdResolver(dio)),
     instanceName: 'coingecko',
   );
 
   di.registerLazySingleton<CryptoApiProvider>(
-    () => BybitApiProvider(dio: dio),
+    () => BybitApiProvider(),
     instanceName: 'bybit',
   );
 

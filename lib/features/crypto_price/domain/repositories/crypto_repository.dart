@@ -1,3 +1,9 @@
+import '../entities/provider_price.dart';
+
 abstract class CryptoRepository {
-  Future<double> getPrice(String ticker1, String ticker2);
+  Future<List<ProviderPrice>> getAllPrices(
+    String ticker1,
+    String ticker2,
+    String count,
+  );
 }
