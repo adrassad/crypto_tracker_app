@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/count_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,9 @@ import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/er
 import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/ticker_field.dart';
 import 'package:crypto_tracker_app/features/crypto_price/presentation/widgets/result_price_list.dart';
 import 'package:crypto_tracker_app/gen_l10n/app_localizations.dart';
+
+import '../widgets/count_keyboard.dart';
+import '../widgets/ticker_keyboard.dart';
 
 class CryptoPage extends StatefulWidget {
   final VoidCallback onToggleLocale;
@@ -63,15 +68,6 @@ class _CryptoPageState extends State<CryptoPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 16),
-            Expanded(
-              child: CountField(
-                controller: _countController,
-                label: loc.count,
-                helperText: '0.0000',
-                currentNode: _countFocus,
-                nextNode: _ticker1Focus,
-              ),
-            ),
             Row(
               children: [
                 Expanded(
@@ -81,6 +77,11 @@ class _CryptoPageState extends State<CryptoPage> {
                     helperText: 'BTC',
                     currentNode: _ticker1Focus,
                     nextNode: _ticker2Focus,
+                    onTap: () {
+                      if (isMobile(context)) {
+                        _showTickerKeyboard(context, 1);
+                      }
+                    },
                   ),
                 ),
                 Padding(
@@ -108,18 +109,50 @@ class _CryptoPageState extends State<CryptoPage> {
                     helperText: 'USDT',
                     currentNode: _ticker2Focus,
                     nextNode: _buttonFocus,
-                    onEditingComplete: () {
-                      context.read<TitleCubit>().getPrice(
-                        _ticker1Controller.text.trim(),
-                        _ticker2Controller.text.trim(),
-                        _countController.text,
-                      );
+                    onTap: () {
+                      if (isMobile(context)) {
+                        _showTickerKeyboard(context, 2);
+                      }
                     },
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 10),
+            CountField(
+              controller: _countController,
+              label: loc.count,
+              helperText: '0.0000',
+              currentNode: _countFocus,
+              nextNode: _buttonFocus,
+              onEditingComplete: () {
+                if (_countController.text.isEmpty) {
+                  _countController.text = '1';
+                }
+                context.read<TitleCubit>().getPrice(
+                  _ticker1Controller.text.trim(),
+                  _ticker2Controller.text.trim(),
+                  _countController.text,
+                );
+              },
+              onFieldSubmitted: (_) {
+                if (_countController.text.isEmpty) {
+                  _countController.text = '1';
+                }
+                context.read<TitleCubit>().getPrice(
+                  _ticker1Controller.text.trim(),
+                  _ticker2Controller.text.trim(),
+                  _countController.text,
+                );
+              },
+              onTap: () {
+                if (isMobile(context)) {
+                  _showCountKeyboard(context);
+                }
+              },
+            ),
+
+            const SizedBox(height: 5),
             ElevatedButton(
               focusNode: _buttonFocus,
               style: ElevatedButton.styleFrom(
@@ -175,6 +208,84 @@ class _CryptoPageState extends State<CryptoPage> {
           ],
         ),
       ),
+    );
+  }
+
+  bool isMobile(context) {
+    print('PLATFORM: $Platform');
+    if (Theme.of(context) == TargetPlatform.iOS) {
+      return true;
+    } else if (Theme.of(context) == TargetPlatform.android) {
+      return true;
+      //}else if(Platform.){
+    } else {
+      return false;
+    }
+  }
+
+  void _showCountKeyboard(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return CountKeyboard(
+          onTextInput: (value) {
+            _countController.text += value;
+          },
+          onBackspace: () {
+            final text = _countController.text;
+            if (text.isNotEmpty) {
+              _countController.text = text.substring(0, text.length - 1);
+            }
+          },
+          onDone: () {
+            context.read<TitleCubit>().getPrice(
+              _ticker1Controller.text.trim(),
+              _ticker2Controller.text.trim(),
+              _countController.text,
+            );
+            Navigator.of(context).pop();
+            FocusScope.of(context).requestFocus(_buttonFocus);
+          },
+        );
+      },
+    );
+  }
+
+  void _showTickerKeyboard(BuildContext context, numberTicker) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return TickerKeyboard(
+          onTextInput: (value) {
+            if (numberTicker == 1) {
+              _ticker1Controller.text += value;
+            } else {
+              _ticker2Controller.text += value;
+            }
+          },
+          onBackspace: () {
+            if (numberTicker == 1) {
+              final text = _ticker1Controller.text;
+              if (text.isNotEmpty) {
+                _ticker1Controller.text = text.substring(0, text.length - 1);
+              }
+            } else {
+              final text = _ticker2Controller.text;
+              if (text.isNotEmpty) {
+                _ticker2Controller.text = text.substring(0, text.length - 1);
+              }
+            }
+          },
+          onDone: () {
+            Navigator.of(context).pop();
+            if (numberTicker == 1) {
+              FocusScope.of(context).requestFocus(_ticker2Focus);
+            } else {
+              FocusScope.of(context).requestFocus(_buttonFocus);
+            }
+          },
+        );
+      },
     );
   }
 

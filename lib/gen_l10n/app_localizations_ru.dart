@@ -30,7 +30,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get coin2 => 'Монета 2';
 
   @override
-  String get enterTicker => 'Введите тикер.';
+  String get enterTicker => 'Введите тикеры и количество.';
 
   @override
   String get error_fetch_failed => 'Не удалось получить цену';

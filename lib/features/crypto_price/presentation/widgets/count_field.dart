@@ -10,6 +10,8 @@ class CountField extends StatelessWidget {
   final FocusNode currentNode;
   final FocusNode? nextNode;
   final VoidCallback? onEditingComplete;
+  final VoidCallback? onTap;
+  final void Function(String)? onFieldSubmitted;
 
   const CountField({
     super.key,
@@ -19,28 +21,29 @@ class CountField extends StatelessWidget {
     required this.currentNode,
     this.nextNode,
     this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      textInputAction:
+          nextNode != null ? TextInputAction.next : TextInputAction.done,
       inputFormatters: [
         LengthLimitingTextInputFormatter(5),
         DoubleInputFormatter(),
       ],
-      onFieldSubmitted: (_) {
-        if (nextNode != null) {
-          FocusScope.of(context).requestFocus(nextNode);
-        } else {
-          FocusScope.of(context).unfocus();
-        }
+      onFieldSubmitted: (value) {
+        final normalized = value.replaceAll(',', '.');
+        print('!!!!!!!!!!onFieldSubmitted $normalized');
+        onFieldSubmitted?.call(normalized);
       },
-      onEditingComplete: () {
-        if (controller.text.isEmpty) {
-          controller.text = '1';
-        }
-      },
+      onEditingComplete: onEditingComplete,
+      onTap: onTap,
       focusNode: currentNode,
+
       controller: controller,
       textCapitalization: TextCapitalization.characters,
       style: GoogleFonts.montserrat(fontSize: 16),

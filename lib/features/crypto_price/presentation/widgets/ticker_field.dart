@@ -10,6 +10,7 @@ class TickerField extends StatelessWidget {
   final FocusNode currentNode;
   final FocusNode? nextNode;
   final VoidCallback? onEditingComplete;
+  final VoidCallback? onTap;
 
   const TickerField({
     super.key,
@@ -19,6 +20,7 @@ class TickerField extends StatelessWidget {
     required this.currentNode,
     this.nextNode,
     this.onEditingComplete,
+    this.onTap,
   });
 
   @override
@@ -35,6 +37,7 @@ class TickerField extends StatelessWidget {
           FocusScope.of(context).unfocus();
         }
       },
+      onTap: onTap,
       onEditingComplete: onEditingComplete,
       focusNode: currentNode,
       controller: controller,

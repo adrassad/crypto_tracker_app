@@ -10,12 +10,15 @@ class BinanceApiProvider extends BaseApiProvider implements CryptoApiProvider {
 
   @override
   Future<double> getPrice(String from, String to, String count) async {
-    final directPrice = await _tryGetDirectPrice(from, to, count);
-    if (directPrice != null) return directPrice;
+    final normalized = count.replaceAll(',', '.');
+    final countValue = double.tryParse(normalized) ?? 1.0;
+    final directPrice = await _tryGetDirectPrice(from, to);
+    if (directPrice != null) return directPrice * countValue;
     try {
-      final reversePrice = await _tryGetDirectPrice(to, from, count);
+      final reversePrice = await _tryGetDirectPrice(to, from);
       if (reversePrice != null && reversePrice != 0.0) {
-        return 1 / reversePrice;
+        final priceValue = 1 / reversePrice;
+        return priceValue * countValue;
       }
       throw CryptoException(CryptoErrorCode.fetchFailed);
     } catch (e) {
@@ -23,11 +26,7 @@ class BinanceApiProvider extends BaseApiProvider implements CryptoApiProvider {
     }
   }
 
-  Future<double?> _tryGetDirectPrice(
-    String from,
-    String to,
-    String count,
-  ) async {
+  Future<double?> _tryGetDirectPrice(String from, String to) async {
     final symbol = '${from.toUpperCase()}${to.toUpperCase()}';
     try {
       final response = await safeGet(
@@ -36,8 +35,7 @@ class BinanceApiProvider extends BaseApiProvider implements CryptoApiProvider {
       );
       final price = response.data['price'];
       if (response.statusCode == 200 && price != null) {
-        final countValue = double.tryParse(count) ?? 1.0;
-        return double.tryParse(price.toString())! * countValue;
+        return double.tryParse(price.toString());
       }
     } catch (_) {}
     return null;

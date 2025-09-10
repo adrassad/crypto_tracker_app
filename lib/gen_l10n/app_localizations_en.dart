@@ -30,7 +30,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get coin2 => 'Coin 2';
 
   @override
-  String get enterTicker => 'Please enter a ticker.';
+  String get enterTicker => 'Please enter a tickers and count.';
 
   @override
   String get error_fetch_failed => 'Failed to fetch price';

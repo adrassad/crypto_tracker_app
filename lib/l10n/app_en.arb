@@ -7,7 +7,7 @@
   "count": "Count",
   "coin1": "Coin 1",
   "coin2": "Coin 2",
-  "enterTicker": "Please enter a ticker.",
+  "enterTicker": "Please enter a tickers and count.",
   "error_fetch_failed": "Failed to fetch price",
   "error_no_internet": "No internet connection",
   "error_unknown": "Unknown error occurred"

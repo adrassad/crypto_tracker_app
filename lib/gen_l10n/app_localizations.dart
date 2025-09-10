@@ -143,7 +143,7 @@ abstract class AppLocalizations {
   /// No description provided for @enterTicker.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a ticker.'**
+  /// **'Please enter a tickers and count.'**
   String get enterTicker;
 
   /// No description provided for @error_fetch_failed.

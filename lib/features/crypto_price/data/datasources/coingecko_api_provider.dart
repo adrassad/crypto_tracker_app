@@ -11,20 +11,23 @@ class CoinGeckoApiProvider extends BaseApiProvider
   @override
   String get providerName => 'CoinGecko';
 
-  CoinGeckoApiProvider({Dio? dio, required CoinGeckoIdResolver resolver})
+  CoinGeckoApiProvider({super.dio, required CoinGeckoIdResolver resolver})
     : _resolver = CoinGeckoIdResolver(
         dio ?? Dio(BaseOptions(baseUrl: 'https://api.coingecko.com')),
       ),
-      super(baseUrl: 'https://api.coingecko.com', dio: dio);
+      super(baseUrl: 'https://api.coingecko.com');
 
   @override
   Future<double> getPrice(String from, String to, String count) async {
-    final directPrice = await _tryGetDirectPrice(from, to, count);
-    if (directPrice != null) return directPrice;
+    final normalized = count.replaceAll(',', '.');
+    final countValue = double.tryParse(normalized) ?? 1.0;
+    final directPrice = await _tryGetDirectPrice(from, to);
+    if (directPrice != null) return directPrice * countValue;
     try {
-      final reversePrice = await _tryGetDirectPrice(to, from, count);
+      final reversePrice = await _tryGetDirectPrice(to, from);
       if (reversePrice != null && reversePrice != 0.0) {
-        return 1 / reversePrice;
+        final price = 1 / reversePrice;
+        return price * countValue;
       }
     } catch (_) {
       throw CryptoException(CryptoErrorCode.fetchFailed);
@@ -32,11 +35,7 @@ class CoinGeckoApiProvider extends BaseApiProvider
     throw CryptoException(CryptoErrorCode.fetchFailed);
   }
 
-  Future<double?> _tryGetDirectPrice(
-    String from,
-    String to,
-    String count,
-  ) async {
+  Future<double?> _tryGetDirectPrice(String from, String to) async {
     try {
       final id = await _resolver.getId(from);
       if (id == null) throw CryptoException(CryptoErrorCode.fetchFailed);
@@ -48,8 +47,7 @@ class CoinGeckoApiProvider extends BaseApiProvider
 
       final price = response.data[id]?[to.toLowerCase()];
       if (response.statusCode == 200 && price != null) {
-        final countValue = double.tryParse(count) ?? 1.0;
-        return double.tryParse(price.toString())! * countValue;
+        return double.tryParse(price.toString());
       }
     } catch (_) {}
     return null;

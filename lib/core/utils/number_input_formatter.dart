@@ -14,7 +14,7 @@ class DoubleInputFormatter extends TextInputFormatter {
     String value = newValue.text;
 
     // Разрешаем только цифры, одну точку и (опционально) минус в начале
-    String pattern = allowNegative ? r'^?\d*\.?\d*$' : r'^\d*\.?\d*$';
+    String pattern = allowNegative ? r'^?\d*\,?\d*$' : r'^\d*\,?\d*$';
     if (!RegExp(pattern).hasMatch(value)) {
       return oldValue;
     }
