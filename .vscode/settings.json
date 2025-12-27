@@ -1,6 +1,5 @@
 {
   // Flutter and Dart settings
-  "dart.flutterSdkPath": null,
   "dart.debugExternalPackageLibraries": false,
   "dart.debugSdkLibraries": false,
   "dart.previewFlutterUiGuides": true,

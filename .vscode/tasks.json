@@ -24,7 +24,7 @@
     {
       "label": "Flutter: Build Runner",
       "type": "shell",
-      "command": "flutter pub run build_runner build --delete-conflicting-outputs",
+      "command": "dart run build_runner build --delete-conflicting-outputs",
       "problemMatcher": [],
       "group": {
         "kind": "build",
@@ -34,7 +34,7 @@
     {
       "label": "Flutter: Watch Build Runner",
       "type": "shell",
-      "command": "flutter pub run build_runner watch --delete-conflicting-outputs",
+      "command": "dart run build_runner watch --delete-conflicting-outputs",
       "problemMatcher": [],
       "isBackground": true,
       "group": {
@@ -65,7 +65,7 @@
     {
       "label": "Flutter: Generate Icons",
       "type": "shell",
-      "command": "flutter pub run flutter_launcher_icons",
+      "command": "dart run flutter_launcher_icons",
       "problemMatcher": [],
       "group": {
         "kind": "build",
