@@ -1,0 +1,111 @@
+{
+  "folders": [
+    {
+      "name": "🏠 Root",
+      "path": "."
+    },
+    {
+      "name": "📚 Source Code (lib)",
+      "path": "lib"
+    },
+    {
+      "name": "🧪 Tests",
+      "path": "test"
+    },
+    {
+      "name": "📱 Android",
+      "path": "android"
+    },
+    {
+      "name": "🍎 iOS",
+      "path": "ios"
+    },
+    {
+      "name": "🌐 Web",
+      "path": "web"
+    },
+    {
+      "name": "🪟 Windows",
+      "path": "windows"
+    },
+    {
+      "name": "🐧 Linux",
+      "path": "linux"
+    },
+    {
+      "name": "💻 macOS",
+      "path": "macos"
+    },
+    {
+      "name": "🎨 Assets",
+      "path": "assets"
+    }
+  ],
+  "settings": {
+    "dart.flutterSdkPath": null,
+    "dart.debugExternalPackageLibraries": false,
+    "dart.debugSdkLibraries": false,
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    
+    "files.exclude": {
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/.dart_tool": true,
+      "**/.flutter-plugins": true,
+      "**/.flutter-plugins-dependencies": true,
+      "**/.packages": true,
+      "**/build": true,
+      "**/*.g.dart": true,
+      "**/*.freezed.dart": true,
+      "**/*.mocks.dart": true
+    },
+    
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/.dart_tool": true,
+      "**/build": true,
+      "**/.flutter-plugins": true,
+      "**/.flutter-plugins-dependencies": true,
+      "**/generated_plugin_registrant.dart": true,
+      "**/*.g.dart": true,
+      "**/*.freezed.dart": true,
+      "**/*.mocks.dart": true,
+      "**/pubspec.lock": true
+    },
+    
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    
+    "[dart]": {
+      "editor.defaultFormatter": "Dart-Code.dart-code",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+    },
+    
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+      "pubspec.yaml": "pubspec.lock, .flutter-plugins, .flutter-plugins-dependencies, .packages, .metadata",
+      "*.dart": "${capture}.g.dart, ${capture}.freezed.dart, ${capture}.mocks.dart",
+      "analysis_options.yaml": ".flutter-plugins, .flutter-plugins-dependencies",
+      "README.md": "LICENSE, CHANGELOG.md, CONTRIBUTING.md"
+    },
+    
+    "explorer.sortOrder": "type",
+    "explorer.compactFolders": false
+  },
+  "extensions": {
+    "recommendations": [
+      "dart-code.flutter",
+      "dart-code.dart-code",
+      "alexisvt.flutter-snippets",
+      "nash.awesome-flutter-snippets",
+      "felixangelov.bloc"
+    ]
+  }
+}
