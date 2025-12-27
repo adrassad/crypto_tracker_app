@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "dart-code.flutter",
+    "dart-code.dart-code",
+    "alexisvt.flutter-snippets",
+    "nash.awesome-flutter-snippets",
+    "felixangelov.bloc",
+    "robert-brunhage.flutter-riverpod-snippets",
+    "usernamehw.errorlens",
+    "wayou.vscode-todo-highlight",
+    "gruntfuggly.todo-tree",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens"
+  ],
+  "unwantedRecommendations": []
+}
