@@ -1,6 +1,7 @@
 import 'package:crypto_tracker_app/features/crypto_price/data/datasources/binance_api_provider.dart';
 import 'package:crypto_tracker_app/features/crypto_price/data/datasources/bybit_api_provider.dart';
 import 'package:crypto_tracker_app/features/crypto_price/data/datasources/coingecko_api_provider.dart';
+import 'package:crypto_tracker_app/features/crypto_price/data/datasources/cryprice_api_provider.dart';
 import 'package:crypto_tracker_app/features/crypto_price/data/datasources/crypto_api_provider.dart';
 import 'package:crypto_tracker_app/features/crypto_price/data/helpers/coingecko_id_resolver.dart';
 import 'package:crypto_tracker_app/features/crypto_price/data/repositories/crypto_repository_impl.dart';
@@ -22,13 +23,7 @@ void setupDependencies() {
   );
 
   di.registerLazySingleton<CryptoApiProvider>(
-    () =>
-    /// `CoinGeckoApiProvider` is a class that serves as a data provider for fetching
-    /// cryptocurrency data from the CoinGecko API. It utilizes a `CoinGeckoIdResolver` instance
-    /// to resolve CoinGecko-specific identifiers using Dio for making HTTP requests. This
-    /// provider is registered as a lazy singleton in the dependency injection setup and is used
-    /// as one of the sources for the `CryptoRepositoryImpl` to retrieve cryptocurrency data.
-    CoinGeckoApiProvider(resolver: CoinGeckoIdResolver(dio)),
+    () => CoinGeckoApiProvider(resolver: CoinGeckoIdResolver(dio)),
     instanceName: 'coingecko',
   );
 
@@ -37,12 +32,18 @@ void setupDependencies() {
     instanceName: 'bybit',
   );
 
+  di.registerLazySingleton<CryptoApiProvider>(
+    () => CrypriceApiProvider(),
+    instanceName: 'cryprice',
+  );
+
   di.registerLazySingleton<CryptoRepository>(
     () => CryptoRepositoryImpl(
       providers: [
         di<CryptoApiProvider>(instanceName: 'binance'),
         di<CryptoApiProvider>(instanceName: 'coingecko'),
         di<CryptoApiProvider>(instanceName: 'bybit'),
+        di<CryptoApiProvider>(instanceName: 'cryprice'),
       ],
     ),
   );

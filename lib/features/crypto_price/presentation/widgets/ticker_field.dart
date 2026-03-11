@@ -25,6 +25,16 @@ class TickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // популярные тикеры
+    final popularTickers = [
+      'BTC',
+      'ETH',
+      'AVAX',
+      'AAVE',
+      'LINK',
+      'USDT',
+      'USDC',
+    ];
     return TextFormField(
       inputFormatters: [
         LengthLimitingTextInputFormatter(5),
@@ -46,7 +56,29 @@ class TickerField extends StatelessWidget {
       decoration: InputDecoration(
         counterText: "",
         labelText: label,
-        helperText: helperText,
+        //helperText: helperText,
+
+        /// 👇 кликабельные подсказки
+        helper: Wrap(
+          spacing: 6,
+          runSpacing: -8,
+          children:
+              popularTickers.map((ticker) {
+                return ActionChip(
+                  label: Text(
+                    ticker,
+                    style: GoogleFonts.montserrat(fontSize: 12),
+                  ),
+                  onPressed: () {
+                    controller.text = ticker;
+
+                    if (nextNode != null) {
+                      FocusScope.of(context).requestFocus(nextNode);
+                    }
+                  },
+                );
+              }).toList(),
+        ),
         labelStyle: GoogleFonts.montserrat(color: Colors.grey[700]),
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
