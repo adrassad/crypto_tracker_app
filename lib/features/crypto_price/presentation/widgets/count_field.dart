@@ -27,6 +27,7 @@ class CountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final popularCout = ['1', '0.1', '0.01', '0.001'];
     return TextFormField(
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       textInputAction:
@@ -37,7 +38,6 @@ class CountField extends StatelessWidget {
       ],
       onFieldSubmitted: (value) {
         final normalized = value.replaceAll(',', '.');
-        print('!!!!!!!!!!onFieldSubmitted $normalized');
         onFieldSubmitted?.call(normalized);
       },
       onEditingComplete: onEditingComplete,
@@ -50,7 +50,28 @@ class CountField extends StatelessWidget {
       decoration: InputDecoration(
         counterText: "",
         labelText: label,
-        helperText: helperText,
+
+        /// 👇 кликабельные подсказки
+        helper: Wrap(
+          spacing: 6,
+          runSpacing: -8,
+          children:
+              popularCout.map((ticker) {
+                return ActionChip(
+                  label: Text(
+                    ticker,
+                    style: GoogleFonts.montserrat(fontSize: 12),
+                  ),
+                  onPressed: () {
+                    controller.text = ticker;
+
+                    if (nextNode != null) {
+                      FocusScope.of(context).requestFocus(nextNode);
+                    }
+                  },
+                );
+              }).toList(),
+        ),
         labelStyle: GoogleFonts.montserrat(color: Colors.grey[700]),
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
